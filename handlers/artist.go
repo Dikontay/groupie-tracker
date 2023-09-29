@@ -9,6 +9,7 @@ import (
 var (
 	artistUrl = "https://groupietrackers.herokuapp.com/api/artists"
 	locationsUrl = "https://groupietrackers.herokuapp.com/api/locations"
+	datesUrl = "https://groupietrackers.herokuapp.com/api/dates"
 
 
 )
@@ -26,10 +27,11 @@ type Artist struct {
 }
 
 func ArtistHandle(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
+	if r.URL.Path != "/artists" {
 		http.Error(w, "Not found", 404)
 	}
-	if r.Method != http.MethodPost {
+	if r.Method != http.MethodGet {
+		fmt.Println("not right method")
 		return
 	}
 
@@ -40,14 +42,14 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}	
 
-	data := []Artist{}
+	//data := []Artist{}
+	data := []DateSingleGroup{}
 
-	err = getElement(artistUrl, data)
+	err = getElement(datesUrl, &data)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(data)
 	ts.Execute(w, data)
 
 }

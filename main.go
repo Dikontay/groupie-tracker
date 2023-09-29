@@ -8,7 +8,8 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", handlers.ArtistHandle)
+	mux.HandleFunc("/", handlers.Home)
+	mux.HandleFunc("/artists", handlers.ArtistHandle)
 	err := http.ListenAndServe(":4000", mux)
 	if err != nil {
 		fmt.Println(err)
