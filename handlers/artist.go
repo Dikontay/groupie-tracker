@@ -26,6 +26,15 @@ type Artist struct {
 	Relations      string   `json:"relations"`
 }
 
+type Dates struct {
+	Index []struct {
+		ID    int      `json:"id"`
+		Dates []string `json:"dates"`
+	} `json:"index"`
+}
+
+
+
 func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/artists" {
 		http.Error(w, "Not found", 404)
@@ -42,10 +51,11 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}	
 
-	//data := []Artist{}
-	data := []DateSingleGroup{}
+	// data := []Artist{}
+	data := Dates{}
 
 	err = getElement(datesUrl, &data)
+	
 	if err != nil {
 		fmt.Println(err)
 		return
