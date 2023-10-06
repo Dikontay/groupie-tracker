@@ -1,0 +1,123 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+header {
+    background-color: #1a1a1a;
+    color: #00ffcc;
+    padding: 15px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-bar {
+    display: flex;
+}
+
+.search-bar input {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.search-bar button {
+    background-color: #00ffcc;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+main {
+    position: relative;
+}
+
+.image-table {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.circle {
+    text-align: center;
+    margin: 10px;
+}
+
+.circle img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.background-image {
+    /* Replace with actual image path from the folder */
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+    z-index: -1;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1a1a1a;
+    color: #00ffcc;
+    padding: 10px;
+    text-align: center;
+}
+
+.artist-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.artist-details {
+    display: flex;
+}
+
+.artist-image img {
+    border-radius: 10px;
+    width: 200px;
+    height: 200px;
+    margin-right: 20px;
+}
+
+.location-list {
+    margin-right: 20px;
+}
+
+.location-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.location-list li {
+    margin-bottom: 10px;
+}
+
+.artist-info {
+    max-width: 400px;
+}
+
+.error-page {
+    text-align: center;
+    padding: 50px;
+    color: #ff6666;
+}
+
+.error-page h2 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
