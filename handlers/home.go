@@ -23,6 +23,5 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal server error", 500)
 		return
 	}
-	msg := "this is home page"
-	err = ts.Execute(w, msg)
+	err = ts.Execute(w, nil)
 }

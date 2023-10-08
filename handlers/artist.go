@@ -7,11 +7,10 @@ import (
 )
 
 var (
-	artistUrl = "https://groupietrackers.herokuapp.com/api/artists"
+	artistUrl    = "https://groupietrackers.herokuapp.com/api/artists"
 	locationsUrl = "https://groupietrackers.herokuapp.com/api/locations"
-	datesUrl = "https://groupietrackers.herokuapp.com/api/dates"
-	relationUrl = "https://groupietrackers.herokuapp.com/api/relation"
-
+	datesUrl     = "https://groupietrackers.herokuapp.com/api/dates"
+	relationUrl  = "https://groupietrackers.herokuapp.com/api/relation"
 )
 
 type Artist struct {
@@ -33,24 +32,26 @@ type Dates struct {
 	} `json:"index"`
 }
 
-
-
 type Locations struct {
 	Index []struct {
-		ID    int      `json:"id"`
+		ID       int      `json:"id"`
 		Location []string `json:"locations"`
-		DatesUrl string `json:"dates"`
+		DatesUrl string   `json:"dates"`
 	} `json:"index"`
 }
 
 type Realtions struct {
-	Index[]struct {
-		ID int `json:"id"`
-		DatesLocations map[string][]string `json"datesLocations"`
-	}`json"index"`
+	// Index[]struct {
+	Index []Index `json:"index"`
+	// ID int `json:"id"`
+	// DatesLocations map[string][]string `json"datesLocations"`
+	// }`json"index"`
 }
 
-
+type Index struct {
+	ID             int                 `json:"id"`
+	DatesLocations map[string][]string `json:"datesLocations"`
+}
 
 func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/artists" {
@@ -61,24 +62,22 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ts,err := template.ParseFiles("./templates/index.html")
-
+	ts, err := template.ParseFiles("./templates/index.html")
 	if err != nil {
 		fmt.Println(err)
 		return
-	}	
+	}
 
 	// data := []Artist{}
-	//data := Dates{}
-//	data:= Locations{}
-	data:= Realtions{}
+	// data := Dates{}
+	//	data:= Locations{}
+	data := Realtions{}
 
 	err = getElement(relationUrl, &data)
-	
+
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	ts.Execute(w, data)
-
 }
