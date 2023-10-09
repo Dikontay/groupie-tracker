@@ -62,7 +62,7 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ts, err := template.ParseFiles("./templates/index.html")
+	ts, err := template.ParseFiles("./templates/artists.html")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -71,13 +71,13 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 	// data := []Artist{}
 	// data := Dates{}
 	//	data:= Locations{}
-	data := Realtions{}
+	// data := Realtions{}
 
-	err = getElement(relationUrl, &data)
+	// err = getElement(relationUrl, &data)
 
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	ts.Execute(w, data)
+	ts.Execute(w, nil)
 }
