@@ -19,23 +19,13 @@
            
 
                 <div class="col-lg-4 col-md-6 col-sm-12 d-flex  justify-content-center" style="background-color: #4D2DB7;" >
-                   <a href="/artists/{{.ID}}" class="text-decoration-none " ><img src="{{.Image}}" class="m-5 "alt="...">
+                   <a href="/artists?ID={{.ID}}" class="text-decoration-none " ><img src="{{.Image}}" class="m-5 "alt="...">
+                    <form action=""><input type="hidden" name="ID" value="{{.ID}}"></form>
                     <h2 class="text-dark ms-5">{{.Name}}</h2>
                 </a> 
                    
                 </div>
-                <!-- <div class="col-lg-4 col-md-6 col-sm-12 d-flex  justify-content-center" style="background-color: #4D2DB7;">
-                    <img src="https://groupietrackers.herokuapp.com/api/images/soja.jpeg" class="m-5"alt="">
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 d-flex  justify-content-center" style="background-color: #4D2DB7;">  <img src="https://groupietrackers.herokuapp.com/api/images/queen.jpeg" class="m-5"alt=""></div>
-            
-            <div class="col-lg-4 col-md-6 col-sm-12 d-flex  justify-content-center" style="background-color: #EC53B0;">  
-                <img src="https://groupietrackers.herokuapp.com/api/images/queen.jpeg" class="m-5"alt="">
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 d-flex  justify-content-center" style="background-color: #EC53B0;">  
-                <img src="https://groupietrackers.herokuapp.com/api/images/queen.jpeg" class="m-5"alt=""></div>
-            <div class="col-lg-4 col-md-6 col-sm-12 d-flex  justify-content-center" style="background-color: #EC53B0;"> 
-                 <img src="https://groupietrackers.herokuapp.com/api/images/queen.jpeg" class="m-5"alt=""></div> -->
+               
        
         {{end}}
     </div>

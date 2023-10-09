@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"text/template"
 )
 
@@ -67,6 +68,29 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
+
+	id := r.URL.Query().Get("ID")
+	if id == "" {
+		fmt.Println("cannot get ID")
+		return
+	}
+	fmt.Println(id)
+	artists := []Artist{}
+	error := getElement(artistUrl, &artists)
+	if error != nil {
+		fmt.Println("no error")
+	}
+	intId, err := strconv.Atoi(id)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	err = ts.Execute(w, artists[intId-1])
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(artists[intId-1])
 
 	// data := []Artist{}
 	// data := Dates{}
