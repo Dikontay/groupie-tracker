@@ -23,16 +23,20 @@
             <div class="location-list">
              
                 <div class = "locations">
-                    <h2 class="text-dark ms-5">{{.Locations}}</h2>
+                    <h2 class="text-dark ms-5">
+                        {{.Locations}}
+                    </h2>
                 </ul>
             </div>
     
             <div class="artist-info">
                 <!-- Dynamically set artist information -->
-                <h2>Artist Name</h2>
-                <p>{{.CreationDate}}</p>
-                <p>First Album: [Album Name]</p>
-                <p>Members: [Member 1, Member 2, ...]</p>
+                <h2>{{.Name}}</h2>
+                <p>Creation Date: {{.CreationDate}}</p>
+                <p>First Album: {{.FirstAlbumDate}}</p>
+                <p>Members: {{range .Members}}</p>
+                <li>{{.}}</li>
+                {{end}}
             </div>
         </div>
         {{end}}
