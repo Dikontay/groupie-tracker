@@ -15,15 +15,15 @@ var (
 )
 
 type Artist struct {
-	ID             int      `json:"id"`
-	Image          string   `json:"image"`
-	Name           string   `json:"name"`
-	Members        []string `json:"members"`
-	CreationDate   int      `json:"creationDate"`
-	FirstAlbumDate string   `json:"firstAlbum"`
-	Locations      string   `json:"locations"`
-	ConcertDates   string   `json:"concertDates"`
-	Relations      string   `json:"relations"`
+	ID             int       `json:"id"`
+	Image          string    `json:"image"`
+	Name           string    `json:"name"`
+	Members        []string  `json:"members"`
+	CreationDate   int       `json:"creationDate"`
+	FirstAlbumDate string    `json:"firstAlbum"`
+	Locations      string    `json:"locations"`
+	ConcertDates   string    `json:"concertDates"`
+	Relations      Realtions `json:"omitempty"`
 }
 
 type Dates struct {
@@ -42,14 +42,6 @@ type Locations struct {
 }
 
 type Realtions struct {
-	// Index[]struct {
-	Index []Index `json:"index"`
-	// ID int `json:"id"`
-	// DatesLocations map[string][]string `json"datesLocations"`
-	// }`json"index"`
-}
-
-type Index struct {
 	ID             int                 `json:"id"`
 	DatesLocations map[string][]string `json:"datesLocations"`
 }
@@ -76,14 +68,24 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(id)
 	artists := []Artist{}
-	error := getElement(artistUrl, &artists)
-	if error != nil {
-		fmt.Println("no error")
+
+	err = getElement(artistUrl, &artists)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 	intId, err := strconv.Atoi(id)
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	relations := Realtions{}
+	err = getElement(relationUrl+"/"+strconv.Itoa(intId), &relations)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	artists[intId-1].Relations = relations
 	err = ts.Execute(w, artists[intId-1])
 	if err != nil {
 		fmt.Println(err)

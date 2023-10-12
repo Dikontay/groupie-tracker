@@ -11,7 +11,9 @@
 <body style = "background-color:#5363D1 ;">
     <div class="container">
         <div class="header w-100 h-100 mt-5" style = "background-color:#CA7FE8 ;">
-            <p class="font-weight-bold">Groupie tracker</p>
+            <form action="document.location='templates/index.html'" class="font-weight-bold">
+                <button>Groupie tracker</button>
+            </form>
     </div>
 
     <main class="artist-page">
@@ -21,11 +23,18 @@
                 <img src="{{.Image}}">
             </div>
             <div class="location-list">
-             
-                <div class = "locations">
-                    <h2 class="text-dark ms-5">
-                        {{.Locations}}
+                <h2>
+                    Concert dates
                     </h2>
+                <div class = "locations">
+                    <p>
+                        {{range $location, $dates := .Relations.DatesLocations}}
+                            <div class="">{{$location}}</div>
+                            {{range $dates}}
+                                {{.}}
+                            {{end}}
+                        {{end}}
+                    </p>
                 </ul>
             </div>
     
