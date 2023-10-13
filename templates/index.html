@@ -6,19 +6,29 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <title>Groupie Tracker</title>
+    <style>
+                .header {
+            background-color: #CA7FE8;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body style = "background-color:#5363D1 ;">
     <div class="container">
-        <div class="header w-100 h-100 mt-5" style = "background-color:#CA7FE8 ;">
-                <p class="font-weight-bold">Groupie tracker</p>
-        </div>
+        <div class="header w-100 h-100 mt-5 " style = "background-color:#CA7FE8 ;">
+            <!-- <form action="document.location='templates/index.html'" class="font-weight-bold">
+                <button>Groupie tracker</button>
+            </form> -->
+            <a style="text-decoration: none; color: black; font-size: 24px; font-weight: bold;" href="/">Groupie tracker</a>
+    </div>
         <div class="main">
             {{if .}}
             <div class="row ">
             {{range .}}
            
 
-                <div class="col-lg-4 col-md-6 col-sm-12 d-flex  justify-content-center" style="background-color: #4D2DB7;" >
+                <div class="col-lg-3 col-md-6 col-sm-12 d-flex  justify-content-center" style="background-color: #fff; " >
                    <a href="/artists?ID={{.ID}}" class="text-decoration-none " ><img src="{{.Image}}" class="m-5 "alt="...">
                     <form action=""><input type="hidden" name="ID" value="{{.ID}}"></form>
                     <h2 class="text-dark ms-5">{{.Name}}</h2>
@@ -32,7 +42,7 @@
         {{else}}
         <h1>Not found</h1>
         {{end}}
-        </div>
+    </div>
        
     </div>
     <!-- <header>
@@ -63,7 +73,9 @@
     <!-- <footer>
         <p>Made by dalimbay and kmassat</p>
     </footer> -->
-   
+    <div class = "footer">
+        <p>Made by dalimbay and kmassat</p>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> 
 
 </body>
