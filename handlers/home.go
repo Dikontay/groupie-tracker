@@ -9,20 +9,21 @@ import (
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		//http.Error(w, "page not found", http.StatusNotFound)
+		// http.Error(w, "page not found", http.StatusNotFound)
+
 		errorHandler(w, http.StatusNotFound)
 		return
 	}
 
 	if r.Method != http.MethodGet {
-		//http.Error(w, "method not allowed", 405)
+		// http.Error(w, "method not allowed", 405)
 		errorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
-	
+
 	artistsCh := make(chan []Artist, 1)
-	
-	go func(){
+
+	go func() {
 		artists := []Artist{}
 		err := getElement(artistUrl, &artists)
 		if err != nil {
@@ -34,11 +35,10 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 	defer close(artistsCh)
-	
 
 	ts, err := template.ParseFiles("./templates/index.html")
 	if err != nil {
-		//http.Error(w, "internal server error", 500)
+		// http.Error(w, "internal server error", 500)
 		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
@@ -46,9 +46,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	select {
 	case artists := <-artistsCh:
 		if artists == nil {
-			//http.Error(w, "Not found", http.StatusNotFound)
+			// http.Error(w, "Not found", http.StatusNotFound)
 			errorHandler(w, http.StatusNotFound)
-
 		} else {
 			err = ts.Execute(w, artists)
 			if err != nil {
@@ -56,10 +55,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-	case <-time.After(3*time.Second):
+	case <-time.After(3 * time.Second):
 		errorHandler(w, http.StatusRequestTimeout)
 		return
 
 	}
-	
 }

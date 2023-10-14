@@ -49,7 +49,9 @@ type Realtions struct {
 func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/artists" {
 		//http.Error(w, "Not found", 404)
+		
 		errorHandler(w, http.StatusNotFound)
+		return
 	}
 	if r.Method != http.MethodGet {
 		errorHandler(w, http.StatusMethodNotAllowed)
@@ -68,17 +70,28 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	artists := []Artist{}
-
+	
 	err = getElement(artistUrl, &artists)
 	if err != nil {
 		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
+	if id[0]=='0'{
+		errorHandler(w, http.StatusBadRequest)
+		return
+	}
+	
 	intId, err := strconv.Atoi(id)
 	if err != nil {
+		
 		errorHandler(w, http.StatusInternalServerError)
+		return
 	}
-
+	if intId<1 || intId>52 {
+		errorHandler(w, http.StatusNotFound)
+		//fmt.Println("ERROR")
+		return 
+	}
 	relations := Realtions{}
 	err = getElement(relationUrl+"/"+strconv.Itoa(intId), &relations)
 	if err != nil {
@@ -91,5 +104,6 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
+	
 
 }

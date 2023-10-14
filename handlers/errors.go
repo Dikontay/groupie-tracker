@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -13,7 +12,7 @@ type ErrorData struct {
 
 func errorHandler(w http.ResponseWriter, status int) {
 	errm := ErrorData{ErrorCode: status, ErrorDesc: http.StatusText(status)}
-	fmt.Println(errm)
+	w.WriteHeader(status)
 	temp, err := template.ParseFiles("./templates/errors.html")
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
