@@ -1,13 +1,15 @@
 # groupie-tracker
 
-Groupie Trackers consists on receiving a given API and manipulate the data contained in it, in order to create a site, displaying the information.
+Groupie Tracker consists on receiving a given API and manipulate the data contained in it, in order to create a site, displaying the information about the musical bands. The purpose of this project is to be able to work with JSON files and handle all of them including errors.
 
-# How to run the project using shell bash
+## Usage
+
+### How to run the project using shell bash
 
 Clone the project by repo
 
 ```bash
-https://01.alem.school/git/dalimbay/groupie-tracker
+git clone https://01.alem.school/git/dalimbay/groupie-tracker
 ```
 
 Go to the directory
@@ -19,10 +21,10 @@ cd groupie-tracker
 Start the server
 
 ```bash
-Go run
+go run .
 ```
 
-And then go to the link in web browser http://localhost:4000/
+And then check the link in web browser http://localhost:4000/
 
 Authors
 
