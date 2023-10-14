@@ -6,23 +6,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <title>Groupie Tracker</title>
-    <style>
-                .header {
-            background-color: #CA7FE8;
-            padding: 10px;
-            text-align: center;
-        }
-    </style>
 </head>
 <body style = "background-color:#5363D1 ;">
     <div class="container">
-        <div class="header w-100 h-100 mt-5 " style = "background-color:#CA7FE8 ;">
-            <!-- <form action="document.location='templates/index.html'" class="font-weight-bold">
-                <button>Groupie tracker</button>
-            </form> -->
+        <div class="header  mt-5 justify-content-center d-flex mb-3 p-3  rounded-3" style = "background-color:#CA7FE8 ;">
+            
             <a style="text-decoration: none; color: black; font-size: 24px; font-weight: bold;" href="/">Groupie tracker</a>
     </div>
-        <div class="main">
+        <div class="main ">
             {{if .}}
             <div class="row ">
             {{range .}}
@@ -30,7 +21,6 @@
 
                 <div class="col-lg-3 col-md-6 col-sm-12 d-flex  justify-content-center" style="background-color: #fff; " >
                    <a href="/artists?ID={{.ID}}" class="text-decoration-none " ><img src="{{.Image}}" class="m-5 "alt="...">
-                    <form action=""><input type="hidden" name="ID" value="{{.ID}}"></form>
                     <h2 class="text-dark ms-5">{{.Name}}</h2>
                 </a> 
                    
@@ -43,39 +33,12 @@
         <h1>Not found</h1>
         {{end}}
     </div>
-       
+    <div class = "footer mt-5 d-flex justify-content-center  mb-3 p-3 align-items-center rounded" style = "background-color:#CA7FE8" ;>
+        <p class="m-0 p-0">Made by dalimbay and kmassat</p>
     </div>
-    <!-- <header>
-        <div class="header-container">
-            <h1>Groupie Tracker</h1> {{.}}
-            <div class="search-bar">
-               Imitation of search bar -->
-                <!-- <input type="text" placeholder="Search...">
-                <button type="submit">Search</button>
-            </div>
-        </div>
-    </header>
-
-    <main>
-        <div class="image-table">
-             Dynamically generated circles with group images and names -->
-            <!-- Example: Replace with actual JSON data -->
-            <!-- <div class="circle">
-                <img src="css/img/11.jpeg" class="rounded mx-auto d-block sm-col-3 md-col-3sm-col-3" alt="...">
-                <p>Group 1</p>
-            </div> -->
-            <!-- Repeat for other groups -->
-        <!-- </div> -->
-        <!-- Background image from folder -->
-        <!-- <div class="background-image"></div> -->
-    <!-- </main> -->
-
-    <!-- <footer>
-        <p>Made by dalimbay and kmassat</p>
-    </footer> -->
-    <div class = "footer">
-        <p>Made by dalimbay and kmassat</p>
     </div>
+   
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> 
 
 </body>

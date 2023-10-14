@@ -48,10 +48,11 @@ type Realtions struct {
 
 func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/artists" {
-		http.Error(w, "Not found", 404)
+		//http.Error(w, "Not found", 404)
+		errorHandler(w, http.StatusNotFound)
 	}
 	if r.Method != http.MethodGet {
-		fmt.Println("not right method")
+		errorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -63,20 +64,19 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 
 	id := r.URL.Query().Get("ID")
 	if id == "" {
-		fmt.Println("cannot get ID")
+		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(id)
 	artists := []Artist{}
 
 	err = getElement(artistUrl, &artists)
 	if err != nil {
-		fmt.Println(err)
+		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	intId, err := strconv.Atoi(id)
 	if err != nil {
-		fmt.Println(err)
+		errorHandler(w, http.StatusInternalServerError)
 	}
 
 	relations := Realtions{}
@@ -88,21 +88,8 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 	artists[intId-1].Relations = relations
 	err = ts.Execute(w, artists[intId-1])
 	if err != nil {
-		fmt.Println(err)
+		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(artists[intId-1])
 
-	// data := []Artist{}
-	// data := Dates{}
-	//	data:= Locations{}
-	// data := Realtions{}
-
-	// err = getElement(relationUrl, &data)
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	ts.Execute(w, nil)
 }
