@@ -6,21 +6,21 @@ Groupie Trackers consists on receiving a given API and manipulate the data conta
 
 Clone the project by repo
 
-'''bash
+```bash
 https://01.alem.school/git/dalimbay/groupie-tracker
-'''
+```
 
 Go to the directory
 
-'''bash
+```bash
 cd groupie-tracker
-'''
+```
 
 Start the server
 
-'''bash
+```bash
 Go run
-'''
+```
 
 And then go to the link in web browser http://localhost:4000/
 
