@@ -34,7 +34,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 			artistsCh <- artists
 		}
 	}()
-	defer close(artistsCh)
+	
 
 	ts, err := template.ParseFiles("./templates/index.html")
 	if err != nil {
@@ -42,7 +42,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
-
+	defer close(artistsCh)
 	select {
 	case artists := <-artistsCh:
 		if artists == nil {
