@@ -60,7 +60,7 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 
 	ts, err := template.ParseFiles("./templates/artists.html")
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 		return
 	}
 
@@ -84,7 +84,7 @@ func ArtistHandle(w http.ResponseWriter, r *http.Request) {
 	intId, err := strconv.Atoi(id)
 	if err != nil {
 		
-		errorHandler(w, http.StatusInternalServerError)
+		errorHandler(w, http.StatusBadRequest)
 		return
 	}
 	if intId<1 || intId>52 {
