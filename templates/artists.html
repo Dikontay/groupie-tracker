@@ -10,7 +10,7 @@
     <style>
         body {
             background-color: #5363D1;
-            color: white;
+            
         }
 
         .header {
@@ -19,27 +19,7 @@
             text-align: center;
         }
 
-        .artist-details {
-            margin-top: 20px;
-        }
-
-        .artist-image img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .artist-info {
-            margin-top: 20px;
-        }
-
-        .location-list {
-            margin-top: 20px;
-        }
-
-        footer {
-            margin-top: 20px;
-            text-align: center;
-        }
+     
     </style>
 </head>
 <body>
@@ -47,30 +27,40 @@
         <div class="header w-100 h-100 mt-5 mb-3 rounded" style = "background-color:#CA7FE8 ;">
             <a style="text-decoration: none; color: black; font-size: 24px; font-weight: bold;" href="/">Groupie tracker</a>
         </div>
-
-        <main class="d-flex">
+        
+        <main class="d-flex align-items-center justify-content-center">
             {{if .}}
             <div class="row d-flex">
-                <div class="artist-image">
+                <div class="img-fluid m-0 p-0 col-lg-4">
                     <img src="{{.Image}}">
                 </div>
-    
-                <div class="artist-info">
+                <div class="col-lg-8">
                     <h2>{{.Name}}</h2>
                     <p2>Creation Date: {{.CreationDate}}</p2>
                     <p2>First Album: {{.FirstAlbumDate}}</p2>
-                    <h2>Members: {{range .Members}}</h2>
-                    <li>{{.}}</li>
-                    {{end}}
                 </div>
-                <div class="location-list">
+                <div class="col-lg-8">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Members
+                    </button>
+                    <ul class="dropdown-menu">
+                        {{range .Members}}
+                      <li class = "dropdown-item">{{.}}</li>
+                      {{end}}
+                    </ul>
+                  </div>
+                </div>
+                <div class="location-list ">
                     <h2>Concert dates</h2>
-                        <div class = "locations">
+                        <div class = "locations ">
                             {{range $location, $dates := .Relations.DatesLocations}}
-                                <div class="">{{$location}}</div>
-                                <ul>
+                            <button class="btn btn-secondary dropdown-toggle w-100 m-2 text-dark" style="background-color: #FFFB73;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{$location}}
+                              </button>
+                                <ul class="dropdown-menu">
                                 {{range $dates}}
-                                    <li>{{.}}</li>
+                                    <li class="dropdown-item">{{.}}</li>
                                 {{end}}
                             </ul>
                             {{end}}
