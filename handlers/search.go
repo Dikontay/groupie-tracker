@@ -1,7 +1,28 @@
- package handlers
+package handlers
 
-// import  "strconv"
+import (
+	"fmt"
+	"net/http"
+)
 
+func HandleSearch(w http.ResponseWriter, r *http.Request) {
+	var userInput string
+	switch r.Method {
+	case http.MethodGet:
+		userInput = r.FormValue("query")
+		fmt.Println(userInput)
+
+	case http.MethodPost:
+		_, err := w.Write([]byte(userInput))
+		if err != nil {
+			errorHandler(w, http.StatusInternalServerError)
+		}
+		fmt.Println("we should post something")
+	default:
+		errorHandler(w, http.StatusMethodNotAllowed)
+	}
+
+}
 
 // func contains(dataset Artist, substr string) []Artist {
 // 	opt := make(map[string]string)
