@@ -23,22 +23,7 @@ type Artist struct {
 	FirstAlbumDate string    `json:"firstAlbum"`
 	Locations      string    `json:"locations"`
 	ConcertDates   string    `json:"concertDates"`
-	Relations      Realtions `json:"omitempty"`
-}
-
-type Dates struct {
-	Index []struct {
-		ID    int      `json:"id"`
-		Dates []string `json:"dates"`
-	} `json:"index"`
-}
-
-type Locations struct {
-	Index []struct {
-		ID       int      `json:"id"`
-		Location []string `json:"locations"`
-		DatesUrl string   `json:"dates"`
-	} `json:"index"`
+	Relations      Realtions `json:"relations"`
 }
 
 type Realtions struct {
