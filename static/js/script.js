@@ -13,5 +13,6 @@ inputBox.onkeyup = function(){
            return word.toLowerCase().includes(input.toLowerCase())
         });
     }
+    //document.write(result[0])
     console.log(result)
 }
