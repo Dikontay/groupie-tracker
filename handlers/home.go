@@ -34,9 +34,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 			artistsCh <- artists
 		}
 	}()
-	
 
-	ts, err := template.ParseFiles("./templates/index.html")
+	ts, err := template.ParseFiles("./ui/index.html")
 	if err != nil {
 		// http.Error(w, "internal server error", 500)
 		errorHandler(w, http.StatusInternalServerError)
