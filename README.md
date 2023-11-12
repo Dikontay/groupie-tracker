@@ -9,7 +9,7 @@ Groupie Tracker consists on receiving a given API and manipulate the data contai
 Clone the project by repo
 
 ```bash
-git clone https://01.alem.school/git/dalimbay/groupie-tracker
+git clone https://github.com/Dikontay/groupie-tracker
 ```
 
 Go to the directory
@@ -26,7 +26,3 @@ go run .
 
 And then check the link in web browser http://localhost:4000/
 
-Authors
-
-    @dalimbay
-    @kmassat
