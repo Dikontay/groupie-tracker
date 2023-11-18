@@ -1,18 +1,23 @@
+let currentFocus = -1
 
-//data in json
-let availableKeywords = ["apple", "aaaaaple", "apppple"]
+const searchInput = document.getElementById('search-input')
+const suggestionsElement = document.getElementById('suggestions')
 
-const resultsBox = document.querySelector(".search-results")
-const inputBox = document.querySelector("#search-input")
+searchInput.addEventListener('input', function(event){
+    currentFocus=-1
+    const query = event.target.value
 
-inputBox.onkeyup = function(){
-    let result = []
-    let input = inputBox.value
-    if (input.length){
-        result = availableKeywords.filter((word)=>{
-           return word.toLowerCase().includes(input.toLowerCase())
-        });
+    if (query.length > 0) {
+        fetch('http://localhost:4000/search?query=${encodeURIComponent(query)}')
+        .then(response => response.json())
+        .then(suggesions => {
+            suggestionsElement.innerHTML = '';
+            suggestions.forEach((suggestion, index) => {
+                const div = document.createElement('div')
+                div.textContent = suggestion;
+                div.classList.add('suggestions-item);
+                
+            });
+        })
     }
-    //document.write(result[0])
-    console.log(result)
-}
+})
