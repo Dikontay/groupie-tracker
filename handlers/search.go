@@ -73,11 +73,17 @@ func getSuggestions(query string)[]string{
 	return nil
    }
    relations := []Realtions{}
-   err = getElement(relationUrl, &relations)
-   if err != nil {
-	fmt.Println(err)
-	return nil
+   for i := range artists {
+	relation := Realtions{}
+	err = getElement(relationUrl+"/"+strconv.Itoa(i+1), &relation)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	   }
+	relations=append(relations, relation)
    }
+   
+ 
    matches := []string{}
    query = strings.ToLower(query)
    for i := range artists {

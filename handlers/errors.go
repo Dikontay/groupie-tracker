@@ -11,7 +11,8 @@ type ErrorData struct {
 }
 
 func errorHandler(w http.ResponseWriter, status int) {
-	w.WriteHeader(status)
+	  w.WriteHeader(status)
+	
 	errm := ErrorData{ErrorCode: status, ErrorDesc: http.StatusText(status)}
 	
 	temp, err := template.ParseFiles("./ui/errors.html")
