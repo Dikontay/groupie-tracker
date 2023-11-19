@@ -105,5 +105,5 @@ func getSuggestions(query string)[]string{
 	}
    }
 
-
+   return matches
 }
