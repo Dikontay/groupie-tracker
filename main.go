@@ -14,7 +14,7 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 	mux.HandleFunc("/", handlers.Home)
 	mux.HandleFunc("/artists", handlers.ArtistHandle)
-	mux.HandleFunc("/search", handlers.HandleSearch)
+	//mux.HandleFunc("/search", handlers.HandleSearch)
 	err := http.ListenAndServe(":4000", mux)
 	if err != nil {
 		fmt.Println(err)

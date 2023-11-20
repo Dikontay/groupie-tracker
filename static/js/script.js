@@ -6,7 +6,7 @@ searchInput.addEventListener('input', function(event) {
     const query = event.target.value;
 
     if (query.length > 0) {
-        fetch(`http://localhost:4000/search?query=${encodeURIComponent(query)}`)
+        fetch(`http://localhost:4000/`)
             .then(response => response.json())
             .then(suggestions => {
                 suggestionsElement.innerHTML = '';
@@ -21,7 +21,9 @@ searchInput.addEventListener('input', function(event) {
                     suggestionsElement.appendChild(div);
                 });
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error(error);
+            });
     } else {
         suggestionsElement.innerHTML = '';
     }
