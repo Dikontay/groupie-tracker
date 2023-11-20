@@ -87,16 +87,16 @@ func getSuggestions(query string)[]string{
    matches := []string{}
    query = strings.ToLower(query)
    for i := range artists {
-		if strings.ContainsAny(strings.ToLower(query), strings.ToLower(artists[i].Name)){
+		if strings.Contains(strings.ToLower(query), strings.ToLower(artists[i].Name)){
 			matches=append(matches, artists[i].Name)
-		} else if strings.ContainsAny(strings.ToLower(query), strconv.Itoa(artists[i].CreationDate)){
+		} else if strings.Contains(strings.ToLower(query), strconv.Itoa(artists[i].CreationDate)){
 			matches = append(matches, strconv.Itoa(artists[i].CreationDate))
-		} else if strings.ContainsAny(strings.ToLower(query), artists[i].FirstAlbumDate){
+		} else if strings.Contains(strings.ToLower(query), artists[i].FirstAlbumDate){
 			matches = append(matches, artists[i].FirstAlbumDate)
 		}
 
 		for _, member := range artists[i].Members {
-			if strings.ContainsAny(query, strings.ToLower(member)) {
+			if strings.Contains(query, strings.ToLower(member)) {
 				matches = append(matches, member)
 			}
 		}
@@ -105,7 +105,7 @@ func getSuggestions(query string)[]string{
 
    for i := range relations {
 	for j := range relations[i].DatesLocations{
-		if strings.ContainsAny(query, strings.ToLower(j)) {
+		if strings.Contains(query, strings.ToLower(j)) {
 			matches=append(matches, j)
 		}
 	}
