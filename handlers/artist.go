@@ -1,93 +1,71 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
-	"text/template"
 )
-
-var (
-	artistUrl    = "https://groupietrackers.herokuapp.com/api/artists"
-	locationsUrl = "https://groupietrackers.herokuapp.com/api/locations"
-	datesUrl     = "https://groupietrackers.herokuapp.com/api/dates"
-	relationUrl  = "https://groupietrackers.herokuapp.com/api/relation"
-)
-
-type Artist struct {
-	ID             int       `json:"id"`
-	Image          string    `json:"image"`
-	Name           string    `json:"name"`
-	Members        []string  `json:"members"`
-	CreationDate   int       `json:"creationDate"`
-	FirstAlbumDate string    `json:"firstAlbum"`
-	Locations      string    `json:"locations"`
-	ConcertDates   string    `json:"concertDates"`
-	Relations      Realtions `json:"omitempty"`
-}
-
-type Realtions struct {
-	ID             int                 `json:"id"`
-	DatesLocations map[string][]string `json:"datesLocations"`
-}
 
 func ArtistHandle(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/artists" {
-		//http.Error(w, "Not found", 404)
-
-		errorHandler(w, http.StatusNotFound)
-		return
-	}
-	if r.Method != http.MethodGet {
-		errorHandler(w, http.StatusMethodNotAllowed)
-		return
-	}
-
-	ts, err := template.ParseFiles("./ui/artists.html")
-	if err != nil {
-		//fmt.Println(err)
-		return
-	}
-
-	id := r.URL.Query().Get("ID")
-	if id == "" {
-		errorHandler(w, http.StatusInternalServerError)
-		return
-	}
-	artists := []Artist{}
-
-	err = getElement(artistUrl, &artists)
-	if err != nil {
-		errorHandler(w, http.StatusInternalServerError)
-		return
-	}
-	if id[0] == '0' {
-		errorHandler(w, http.StatusBadRequest)
-		return
-	}
-
-	intId, err := strconv.Atoi(id)
-	if err != nil {
-
-		errorHandler(w, http.StatusBadRequest)
-		return
-	}
-	if intId < 1 || intId > 52 {
-		errorHandler(w, http.StatusNotFound)
-		//fmt.Println("ERROR")
-		return
-	}
-	relations := Realtions{}
-	err = getElement(relationUrl+"/"+strconv.Itoa(intId), &relations)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	artists[intId-1].Relations = relations
-	err = ts.Execute(w, artists[intId-1])
-	if err != nil {
-		errorHandler(w, http.StatusInternalServerError)
-		return
-	}
-
+	//if r.URL.Path != "/artists" {
+	//	// http.Error(w, "Not found", 404)
+	//
+	//	errorHandler(w, http.StatusNotFound)
+	//	return
+	//}
+	//if r.Method != http.MethodGet {
+	//	errorHandler(w, http.StatusMethodNotAllowed)
+	//	return
+	//}
+	//
+	//ts, err := template.ParseFiles("./static/templates/artists.html")
+	//if err != nil {
+	//	// fmt.Println(err)
+	//	log.Printf("Can not parse index.html %e", err)
+	//	errorHandler(w, http.StatusInternalServerError)
+	//	return
+	//}
+	//
+	//id := r.URL.Query().Get("ID")
+	//if id == "" {
+	//	errorHandler(w, http.StatusBadRequest)
+	//	return
+	//}
+	//artists := []models.Artist{}
+	//
+	//err = getElement(artistUrl, &artists)
+	//if err != nil {
+	//	log.Printf("Can not get element %e", err)
+	//	errorHandler(w, http.StatusInternalServerError)
+	//	return
+	//}
+	//if id[0] == '0' {
+	//	errorHandler(w, http.StatusBadRequest)
+	//	return
+	//}
+	//
+	//intId, err := strconv.Atoi(id)
+	//if intId < 1 || intId > 52 {
+	//	errorHandler(w, http.StatusBadRequest)
+	//	// fmt.Println("ERROR")
+	//	return
+	//}
+	//if err != nil {
+	//	log.Println(err)
+	//	errorHandler(w, http.StatusBadRequest)
+	//	return
+	//}
+	//
+	//relations := models.Relations{}
+	//err = getElement(relationUrl+"/"+strconv.Itoa(intId), &relations)
+	//if err != nil {
+	//	log.Println(err)
+	//	errorHandler(w, http.StatusInternalServerError)
+	//	return
+	//}
+	//artists[intId-1].Relations = relations
+	//err = ts.Execute(w, artists[intId-1])
+	//if err != nil {
+	//	log.Println(err)
+	//	errorHandler(w, http.StatusInternalServerError)
+	//	return
+	//}
 }

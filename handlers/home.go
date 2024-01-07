@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
+	"groupie-trakcer/singleton"
+
+	"log"
 	"net/http"
-	"strconv"
 	"text/template"
 	"time"
 )
@@ -23,77 +24,50 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	artistsCh := make(chan []Artist, 1)
+	dataCh := make(chan *singleton.Data)
+
+	//artistsCh := make(chan []Artist, 1)
 
 	go func() {
-		artists := []Artist{}
-		err := getElement(artistUrl, &artists)
-		if err != nil {
-			fmt.Println(err)
-			artistsCh <- nil
-			return
+		data := singleton.GetAllData()
+		//artists := []Artist{}
+		//err := getElement(artistUrl, &artists)
+		if data != nil {
+			//fmt.Println(err)
+			//artistsCh <- nil
+			dataCh <- data
 		} else {
-			artistsCh <- artists
+			dataCh <- nil
 		}
+		return
 	}()
 
 	ts, err := template.ParseFiles("./static/templates/index.html")
 	if err != nil {
 		// http.Error(w, "internal server error", 500)
+		fmt.Println(err)
 		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	defer close(artistsCh)
+
 	select {
-	case artists := <-artistsCh:
-		if artists == nil {
+	case info := <-dataCh:
+		if info == nil {
 			// http.Error(w, "Not found", http.StatusNotFound)
+			log.Println("Can't get artists")
 			errorHandler(w, http.StatusNotFound)
 		} else {
-			err = ts.Execute(w, artists)
+			err = ts.Execute(w, info.AllArtists)
 			if err != nil {
 				errorHandler(w, http.StatusInternalServerError)
 				return
 			}
 		}
 	case <-time.After(3 * time.Second):
+		log.Println("Can't get artists from channel")
 		errorHandler(w, http.StatusRequestTimeout)
 		return
 
 	}
-	err = json.NewEncoder(w).Encode(getSuggestionsForSearch())
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-}
-
-func getSuggestionsForSearch() []string {
-	suggestions := []string{}
-	artists := []Artist{}
-	err := getElement(artistUrl, &artists)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	relations := []Realtions{}
-	for i := range artists {
-		relation := Realtions{}
-		err = getElement(relationUrl+"/"+strconv.Itoa(i+1), &relation)
-		if err != nil {
-			fmt.Println(err)
-		}
-		for index := range relations {
-			for location := range relations[index].DatesLocations {
-				suggestions = append(suggestions, location)
-			}
-		}
-		relations = append(relations, relation)
-		suggestions = append([]string{artists[i].Name + "artist/band", artists[i].FirstAlbumDate, strconv.Itoa(artists[i].CreationDate)})
-		for j := range artists[i].Members {
-			suggestions = append(suggestions, artists[i].Members[j]+" - member")
-		}
-
-	}
-	return suggestions
+	defer close(dataCh)
 }
