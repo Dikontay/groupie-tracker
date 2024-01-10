@@ -24,34 +24,43 @@ var (
 )
 var singleData *Data
 
-func GetAllData() *Data {
+func GetAllData() (*Data, error) {
 	if singleData == nil {
 		lock.Lock()
 		defer lock.Unlock()
 		if singleData == nil {
 			fmt.Println("Creating single instance now.")
-			singleData = newData()
+			var err error
+			singleData, err = newData()
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
-	return singleData
+	return singleData, nil
 }
 
-func newData() *Data {
+func newData() (*Data, error) {
 	var artists []models.Artist
 	var dates []models.Dates
 	var locations []models.Locations
 	var relations []models.Relations
-	err := getElement(artistUrl, &artists)
+	
+
+	var err, lastErr error
+
+	err = getElement(artistUrl, &artists)
 	if err != nil {
 		log.Print("get element error")
-		return nil
+		return nil, err
 	}
+
 	for _, artist := range artists {
 		date := models.Dates{}
 		err = getElement(artist.ConcertDates, &date)
 		if err != nil {
+			lastErr = err
 			log.Printf("Error getting date for artist : %T", artist)
-			return nil
 		}
 		dates = append(dates, date)
 
@@ -59,7 +68,8 @@ func newData() *Data {
 		err = getElement(artist.Locations, &location)
 		if err != nil {
 			log.Printf("Error getting location for artist : %T", artist)
-			return nil
+			lastErr= err
+			
 		}
 		locations = append(locations, location)
 
@@ -67,15 +77,18 @@ func newData() *Data {
 		err = getElement(artist.Relations, &relation)
 		if err != nil {
 			log.Printf("Error getting relation for artist : %T", artist)
-			return nil
+			lastErr = err
 		}
 
 		relations = append(relations, relation)
 	}
+	if lastErr != nil {
+		return nil, lastErr
+	}
 
-	singleData = &Data{AllArtists: artists, AllDates: dates, AllLocations: locations, AllRelations: relations}
+	 
 
-	return singleData
+	return &Data{AllArtists: artists, AllDates: dates, AllLocations: locations, AllRelations: relations}, nil
 }
 
 func getElement(url string, target interface{}) error {
@@ -95,3 +108,4 @@ func getElement(url string, target interface{}) error {
 	}
 	return nil
 }
+
