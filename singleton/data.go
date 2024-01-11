@@ -10,11 +10,17 @@ import (
 	"sync"
 )
 
-type Data struct {
+type data struct {
 	AllArtists   []models.Artist
 	AllDates     []models.Dates
 	AllLocations []models.Locations
 	AllRelations []models.Relations
+}
+
+type sinleInstance struct{
+	Dates     models.Dates
+	Locations models.Locations
+	Relations models.Relations
 }
 
 var lock = &sync.Mutex{}
@@ -22,14 +28,13 @@ var lock = &sync.Mutex{}
 var (
 	artistUrl = "https://groupietrackers.herokuapp.com/api/artists"
 )
-var singleData *Data
+var singleData *data
 
-func GetAllData() (*Data, error) {
+func GetAllData() (*data, error) {
 	if singleData == nil {
 		lock.Lock()
 		defer lock.Unlock()
 		if singleData == nil {
-			fmt.Println("Creating single instance now.")
 			var err error
 			singleData, err = newData()
 			if err != nil {
@@ -40,55 +45,62 @@ func GetAllData() (*Data, error) {
 	return singleData, nil
 }
 
-func newData() (*Data, error) {
+func newData() (*data, error) {
 	var artists []models.Artist
-	var dates []models.Dates
-	var locations []models.Locations
-	var relations []models.Relations
-	
 
-	var err, lastErr error
-
-	err = getElement(artistUrl, &artists)
+	err := getElement(artistUrl, &artists)
 	if err != nil {
 		log.Print("get element error")
 		return nil, err
 	}
+	var wg sync.WaitGroup
 
-	for _, artist := range artists {
-		date := models.Dates{}
-		err = getElement(artist.ConcertDates, &date)
-		if err != nil {
-			lastErr = err
-			log.Printf("Error getting date for artist : %T", artist)
-		}
-		dates = append(dates, date)
+	dataCh := make(chan *sinleInstance, len(artists))
+	errCh := make(chan error, len(artists))
 
-		location := models.Locations{}
-		err = getElement(artist.Locations, &location)
-		if err != nil {
-			log.Printf("Error getting location for artist : %T", artist)
-			lastErr= err
+	for _, artist := range artists{
+		wg.Add(1)
+		go func (artist models.Artist){
+			defer wg.Done()
+			// single date, location, relation for the one artist
+			var data sinleInstance
+			var err error
+
+			err = getElement(artist.ConcertDates, &data.Dates)
+			if err != nil {
+				errCh<-err
+				return
+			}
 			
-		}
-		locations = append(locations, location)
+			err = getElement(artist.Locations, &data.Locations)
+			if err != nil {
+				errCh<-err
+				return
+			}
+			err = getElement(artist.Relations, &data.Relations)
+			if err != nil {
+				errCh<-err
+				return
+			}
 
-		relation := models.Relations{}
-		err = getElement(artist.Relations, &relation)
-		if err != nil {
-			log.Printf("Error getting relation for artist : %T", artist)
-			lastErr = err
-		}
+			dataCh<-&data
 
-		relations = append(relations, relation)
+
+		}(artist)
 	}
-	if lastErr != nil {
-		return nil, lastErr
-	}
-
 	 
+	wg.Wait()
+	close(dataCh)
+	close(errCh)
+	allData := &data{}
 
-	return &Data{AllArtists: artists, AllDates: dates, AllLocations: locations, AllRelations: relations}, nil
+	allData.AllArtists=artists
+	for d := range dataCh{
+		allData.AllDates = append(allData.AllDates, d.Dates)
+		allData.AllLocations=append(allData.AllLocations, d.Locations)
+		allData.AllRelations=append(allData.AllRelations, d.Relations)
+	}
+	return allData, nil
 }
 
 func getElement(url string, target interface{}) error {
