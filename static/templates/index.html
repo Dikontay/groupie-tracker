@@ -27,19 +27,6 @@
             <form action="/search" method="GET" class="d-flex">
                 <input list="suggestions" class="form-control me-2" type="search" name="query" placeholder="Search..." aria-label="Search"> 
                 <datalist id="suggestions">
-                    {{if .}}
-                    {{range .}}
-                    <option value="{{.Name}} - artist"></option>
-                    <option value="{{.FirstAlbumDate}}"></option>
-                    <option value="{{.CreationDate}}"></option>
-                    {{range .Members}}
-                    <option value="{{.}} - member"></option>
-                    {{end}}
-                   
-                    {{range $location, $dates := .Relations.DatesLocations}}
-                                    <option value = "{{$location}}"></div>
-                                {{end}}
-                                {{end}}
                   </datalist>
                 <button class="btn btn-outline-dark" type="submit">Search</button>
             </form>
@@ -62,9 +49,6 @@
        
                      {{end}}
     </div>
-    <!-- {{end}} -->
-        {{else}}
-        <h1>Not found</h1>
         {{end}}
     </div>
     <div class = "footer mt-5 d-flex justify-content-center  mb-3 p-3 align-items-center rounded" style = "background-color:#CA7FE8" ;>

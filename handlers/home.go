@@ -5,7 +5,7 @@ import (
 	"groupie-trakcer/singleton"
 	"log"
 	"net/http"
-	"text/template"
+	"html/template"
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
@@ -25,11 +25,16 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	data, err := singleton.GetAllData()
+	Data, err := singleton.GetAllData()
 	if err != nil {
 		log.Printf("Getting all data error %e", err)
 		errorHandler(w, http.StatusInternalServerError)
 	}
 
-	ts.Execute(w, data.AllArtists)
+	err = ts.Execute(w, Data.AllArtists)
+	if err != nil {
+		fmt.Println(err)
+		errorHandler(w, http.StatusInternalServerError)
+		return
+	}
 }

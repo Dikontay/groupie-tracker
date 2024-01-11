@@ -14,11 +14,12 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 	mux.HandleFunc("/", handlers.Home)
 	mux.HandleFunc("/artists", handlers.ArtistHandle)
-	err := http.ListenAndServe(":4000", mux)
+	err := http.ListenAndServe(":8080", mux)
+	log.Print("Starting server on : http://localhost:6000")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	log.Print("Starting server on : http://localhost:4000")
+	
 
 }

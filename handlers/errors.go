@@ -15,7 +15,7 @@ func errorHandler(w http.ResponseWriter, status int) {
 	
 	errm := ErrorData{ErrorCode: status, ErrorDesc: http.StatusText(status)}
 	
-	temp, err := template.ParseFiles("./ui/errors.html")
+	temp, err := template.ParseFiles("./static/templates/errors.html")
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
