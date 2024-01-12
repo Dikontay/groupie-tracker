@@ -1,55 +1,53 @@
 package handlers
 
-//
-//import (
-//	"encoding/json"
-//	"fmt"
-//	"net/http"
-//	"strconv"
-//	"strings"
-//)
-//
-//func HandleSearch(w http.ResponseWriter, r *http.Request) {
-//	// Check if the method is GET
-//
-//	if r.Method == http.MethodOptions {
-//		w.Header().Set("Access-Control;-Allow-Origin", "*")
-//		//the options method is used as a preflight rewuest in cors. it is sent by the browther automatically before the actual request (like get and post) in
-//		// certain situations particularly when the request is more complex
-//		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-//		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-//		w.WriteHeader(http.StatusOK)
-//		return
-//	}
-//
-//	w.Header().Set("Access-Control-Allow-Origin", "*")
-//
-//	// Get the query parameter
-//	query := r.URL.Query().Get("query")
-//	if query == "" {
-//		http.Error(w, "Query not provided", http.StatusBadRequest)
-//		return
-//	}
-//	artists := []Artist{}
-//	err := getElement(artistUrl, &artists)
-//	if err != nil {
-//		errorHandler(w, http.StatusInternalServerError)
-//
-//	}
-//	// Perform the search and get suggestions
-//	suggestions := getSuggestions(query)
-//	json.NewEncoder(w).Encode(suggestions)
-//
-//	// // Convert the suggestions to JSON and send them back
-//	// jsonResponse, err := json.Marshal(artist)
-//	// if err != nil {
-//	// 	http.Error(w, "Failed to marshal suggestions", http.StatusInternalServerError)
-//	// 	return
-//	// }
-//
-//	// w.Header().Set("Content-Type", "application/json")
-//	// w.Write(jsonResponse)
-//}
+import (
+	"encoding/json"
+	"groupie-trakcer/singleton"
+	"net/http"
+)
+
+func HandleSearch(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/search" {
+		errorHandler(w, http.StatusNotFound)
+		return
+	}
+
+	// Check if the method is GET
+
+	if r.Method == http.MethodOptions {
+		w.Header().Set("Access-Control;-Allow-Origin", "*")
+		// the options method is used as a preflight rewuest in cors. it is sent by the browther automatically before the actual request (like get and post) in
+		// certain situations particularly when the request is more complex
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// Get the query parameter
+	// query := r.URL.Query().Get("query")
+	// if query == "" {
+	// 	http.Error(w, "Query not provided", http.StatusBadRequest)
+	// 	return
+	// }
+	data, err := singleton.GetAllData()
+	if err != nil {
+		errorHandler(w, http.StatusInternalServerError)
+	}
+
+	// Convert the suggestions to JSON and send them back
+	jsonResponse, err := json.Marshal(data)
+	if err != nil {
+		http.Error(w, "Failed to marshal suggestions", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonResponse)
+}
+
 //
 //func search(input string, artisits []Artist) Artist {
 //	for _, artist := range artisits {
