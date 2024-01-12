@@ -6,7 +6,7 @@ searchInput.addEventListener('input', function(event) {
     const query = event.target.value;
 
     if (query.length > 0) {
-        fetch(`http://localhost:4000/`)
+        fetch(`http://localhost:8080/`)
             .then(response => response.json())
             .then(suggestions => {
                 suggestionsElement.innerHTML = '';
