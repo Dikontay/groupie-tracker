@@ -21,8 +21,8 @@ func main() {
 	mux.HandleFunc("/", handlers.Home)
 	mux.HandleFunc("/artists", handlers.ArtistHandle)
 	mux.HandleFunc("/search", handlers.HandleSearch)
-	log.Print("Starting server on : http://localhost:8080")
-	err := http.ListenAndServe(":8080", mux)
+	log.Print("Starting server on : http://localhost:8000")
+	err := http.ListenAndServe(":8000", mux)
 	if err != nil {
 		fmt.Println(err)
 		return

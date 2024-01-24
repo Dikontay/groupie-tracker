@@ -25,9 +25,10 @@
             
             <a style="text-decoration: none; color: black; font-size: 24px; font-weight: bold;" href="/">Groupie tracker</a>
             <form action="/search" method="GET" class="d-flex">
-                <input list="suggestions" class="form-control me-2" type="search" name="query" placeholder="Search..." aria-label="Search"> 
-                <datalist id="suggestions">
-                  </datalist>
+                <input list="suggestions" class="form-control me-2" type="search" name="query" id = "search-input" placeholder="Search..." aria-label="Search"> 
+               <div id="suggestions">
+                
+               </div>
                 <button class="btn btn-outline-dark" type="submit">Search</button>
             </form>
     </div>
