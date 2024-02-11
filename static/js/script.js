@@ -1,61 +1,26 @@
-const searchInput = document.getElementById('search-input');
-const suggestionsElement = document.getElementById('suggestions');
-
-searchInput.addEventListener('input', function(event) {
-    currentFocus = -1; // Reset the current focus
+document.getElementById('search-input').addEventListener('input', function(event) {
     const query = event.target.value;
-
     if (query.length > 0) {
         fetch(`http://localhost:8000/search?query=${encodeURIComponent(query)}`)
             .then(response => response.json())
             .then(suggestions => {
-                console.log(suggestions)
-                suggestionsElement.innerHTML = '';
-                suggestions.forEach((suggestion, index) => {
-                    const div = document.createElement('div');
-                    div.textContent = suggestion;
-                    div.classList.add('suggestion-item');
-                    div.onclick = function() {
-                        searchInput.value = suggestion;
-                        suggestionsElement.innerHTML = '';
-                    };
-                    suggestionsElement.appendChild(div);
+                const suggestionsElement = document.getElementById('suggestions');
+                suggestionsElement.innerHTML = ''; // Clear previous suggestions
+                suggestionsElement.style.display = 'block'; // Show suggestions list
+                suggestions.forEach(suggestion => {
+                    const li = document.createElement('li');
+                    li.textContent = suggestion;
+                    li.classList.add('list-group-item');
+                    li.addEventListener('click', () => {
+                        document.getElementById('search-input').value = suggestion;
+                        suggestionsElement.innerHTML = ''; // Clear suggestions
+                        suggestionsElement.style.display = 'none'; // Hide suggestions list
+                    });
+                    suggestionsElement.appendChild(li);
                 });
             })
-            .catch(error => {
-                console.error(error);
-            });
+            .catch(error => console.error(error));
     } else {
-        suggestionsElement.innerHTML = '';
+        document.getElementById('suggestions').style.display = 'none'; // Hide suggestions list if query is empty
     }
 });
-
-searchInput.addEventListener('keydown', function(e) {
-    let items = suggestionsElement.getElementsByClassName('suggestion-item');
-    if (e.keyCode == 40) { // Down key
-        currentFocus++;
-        addActive(items);
-    } else if (e.keyCode == 38) { // Up key
-        currentFocus--;
-        addActive(items);
-    } else if (e.keyCode == 13) { // Enter key
-        e.preventDefault();
-        if (currentFocus > -1) {
-            if (items) items[currentFocus].click();
-        }
-    }
-});
-
-function addActive(items) {
-    if (!items) return false;
-    removeActive(items);
-    if (currentFocus >= items.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (items.length - 1);
-    items[currentFocus].classList.add('suggestion-active');
-}
-
-function removeActive(items) {
-    for (let i = 0; i < items.length; i++) {
-        items[i].classList.remove('suggestion-active');
-    }
-}

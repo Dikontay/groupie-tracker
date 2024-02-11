@@ -24,25 +24,26 @@
         <div class="header  mt-5 justify-content-between d-flex mb-3 p-3  rounded-3" style = "background-color:#CA7FE8 ;">
             
             <a style="text-decoration: none; color: black; font-size: 24px; font-weight: bold;" href="/">Groupie tracker</a>
-            <form action="/search" method="GET" class="d-flex">
-                <input list="suggestions" class="form-control me-2" type="search" name="query" id = "search-input" placeholder="Search..." aria-label="Search"> 
-               <div id="suggestions">
-                
-               </div>
+            <form id="search-form" class="d-flex" onsubmit="return false;">
+                <input class="form-control me-2" type="search" id="search-input" placeholder="Search..." aria-label="Search">
+                <ul id="suggestions" class="list-group" style="position: absolute; z-index: 1000; display: none;"></ul>
                 <button class="btn btn-outline-dark" type="submit">Search</button>
             </form>
     </div>
+
+        <div id="search-results" class="mt-3"></div>
+
         <div class="main ">
             {{if .}}
             <div class="row ">
             {{range .}}
-           
-              
-                    <div class="col-lg-3 col-md-6 col-sm-12 d-flex  justify-content-center "  style="background-color: #fff; " >
+
+
+                    <div class="col-lg-3 col-md-6 col-sm-12 d-flex  justify-content-center artist-card "  style="background-color: #fff; " >
                         <a href="/artists?ID={{.ID}}" class="text-decoration-none  p-2" ><img src="{{.Image}}" class="m-3 mb-3 p-2 card shadow hover-zoom" alt="...">
-                         <h2 class="text-dark ms-5">{{.Name}}</h2>
-                     </a> 
-                        
+                         <h2 class="text-dark ms-5 artist-name">{{.Name}}</h2>
+                     </a>
+
                      </div>
                 
             
@@ -56,8 +57,79 @@
         <p class="m-0 p-0">Made by dalimbay and kmassat</p>
     </div>
     </div>
-   
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchForm = document.getElementById('search-form');
+            const searchInput = document.getElementById('search-input');
+            const suggestionsElement = document.getElementById('suggestions');
+
+            // Handle live search suggestions
+            searchInput.addEventListener('input', function(event) {
+                const query = event.target.value.trim();
+                if (query.length > 0) {
+                    fetch(`http://localhost:8000/search?query=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(suggestions => {
+                            suggestionsElement.innerHTML = ''; // Clear previous suggestions
+                            suggestions.forEach(suggestion => {
+                                const li = document.createElement('li');
+                                li.textContent = suggestion;
+                                li.classList.add('list-group-item');
+                                li.addEventListener('click', () => {
+                                    searchInput.value = suggestion;
+                                    filterArtistsByName(suggestion); // Immediately filter artists based on the clicked suggestion
+                                    suggestionsElement.style.display = 'none'; // Hide suggestions list
+                                });
+                                suggestionsElement.appendChild(li);
+                            });
+                            suggestionsElement.style.display = 'block'; // Show suggestions list
+                        })
+                        .catch(error => console.error(error));
+                } else {
+                    suggestionsElement.style.display = 'none'; // Hide suggestions list if query is empty
+                    resetArtistCardsDisplay(); // Show all artist cards when input is cleared
+                }
+            });
+
+            // Handle form submission for search
+            searchForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from actually submitting
+                const query = searchInput.value.trim();
+                filterArtistsByName(query); // Filter artists based on the form input value
+                suggestionsElement.style.display = 'none'; // Hide suggestions list
+            });
+
+            // Filter artist cards by name
+            function filterArtistsByName(artistName) {
+                const artistCards = document.querySelectorAll('.artist-card');
+                let found = false;
+                artistCards.forEach(card => {
+                    const name = card.querySelector('.artist-name').textContent.toLowerCase();
+                    if (name.includes(artistName.toLowerCase())) {
+                        card.style.display = '';
+                        found = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (!found) {
+                    document.getElementById('search-results').innerHTML = '<p>No artists found.</p>';
+                } else {
+                    document.getElementById('search-results').innerHTML = '';
+                }
+            }
+
+            // Reset display of all artist cards
+            function resetArtistCardsDisplay() {
+                const artistCards = document.querySelectorAll('.artist-card');
+                artistCards.forEach(card => card.style.display = '');
+            }
+        });
+    </script>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> 
 
 </body>
